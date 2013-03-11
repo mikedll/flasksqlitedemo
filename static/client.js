@@ -19,7 +19,7 @@ $(function(){
                                     var li = $('<li></li>');
                                     li.append('<div class="title">' + data.title + '</div>');
                                     li.append('<div class="date">' + data.created_at + '</div>');
-                                    $('.notes ul').append(li);
+                                    $('.notes ul').prepend(li);
                                 }
                                 
                             });
