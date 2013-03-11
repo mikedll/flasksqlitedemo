@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="newnote">
+      <form method="post" target="/create">
+        <input type="text" name="note[title]" id="note_title"/>
+        <input type="submit" value="Create"/>
+      </form>
+    </div>
+    <div class="notes">
+      <ul>
+        {% for note in notes %}
+          <li class="note{{note.id}}">
+            test
+            <div class="title">{{note['title']}}</div>
+            <div class="date">{{note['created_at']}}</div>
+          </li>
+        {% endfor %}
+    </div>
+{% endblock %}
