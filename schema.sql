@@ -1,5 +1,5 @@
 
-drop table 'notes' if exists notes;;
+-- drop table 'notes;
 
 create table 'notes' (
        id INTEGER PRIMARY KEY AUTOINCREMENT,

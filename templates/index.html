@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
     <div class="newnote">
-      <form method="post" target="/create">
-        <input type="text" name="note[title]" id="note_title"/>
-        <input type="submit" value="Create"/>
+      <form method="post" target="/" class="form-inline">
+          <input type="text" name="note[title]" id="note_title"/>
+          <input type="submit" value="Create" class="btn btn-primary"/>
       </form>
     </div>
     <div class="notes">

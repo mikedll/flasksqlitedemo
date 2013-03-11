@@ -1,4 +1,5 @@
 
+import json
 import sqlite3
 import os
 from contextlib import closing
@@ -8,6 +9,7 @@ DATABASE = 'data.db'
 
 app = Flask(__name__)
 
+# schema load
 def init_db():
     with closing(connect_db()) as db:
         with app.open_resource('schema.sql') as f:
@@ -34,17 +36,19 @@ def teardown_request(exception):
     if hasattr(g, 'db'):
         g.db.close()
 
+# basic listing of notes
 @app.route('/')
 def index():
     notes = query_db('select * from notes')
     return render_template('index.html', notes=notes)
 
+# creating a note
 @app.route('/', methods=['POST'])
 def create():
     cursor = g.db.execute('insert into notes (title, created_at) values (?, datetime("now"))', [request.form['note[title]']])
     g.db.commit()
-    note = query_db('select * from notes where id = ?', (cursor.lastrowid), True)
-    return '{"title": %s, "created_at": %s}' % (note['title'], note['created_at'])
+    note = query_db('select * from notes where id = ?', [cursor.lastrowid], True)
+    return json.dumps(note)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
