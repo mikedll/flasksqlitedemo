@@ -1,5 +1,22 @@
 
 
+# Setting this app up locally
+
+Install flask, othe reqs
+
+    pip install -r requirements.txt
+    
+Load the schema
+
+    python
+    > from app import init_db
+    > init_db() # run schema
+
+Run webapp
+
+    python app.py
+
+Connect to localhost:5000
 
 # Reqs
 
