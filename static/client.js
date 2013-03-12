@@ -1,5 +1,4 @@
 
-
 /*
  * Client js responsibilities, such as posting the note.
  */
@@ -15,11 +14,23 @@ $(function(){
       var notes = function(opts) {    return rest($.extend({'url': '/notes'},    opts)); };
       var hashtags = function(opts) { return rest($.extend({'url': '/hashtags'}, opts)); };
 
+      var hashtag_filter = function() {
+          var btn = $('.hashtag_link.btn-primary');
+          if( btn.length === 0 ) return null;
+          return btn.first().text();
+      };
+
       var renderNote = function(note, prepend) {
+          var hashtag = hashtag_filter();
+          if(hashtag !== null) {
+              var t = new RegExp('#' + hashtag);
+              if(!t.test(note.title)) return;
+          }
+
           if( $('.notes ul li#note' + note.id).length > 0) return;
 
           var li = $('<li id="note' + note.id + '"></li>');
-          li.append('<div class="title">' + note.title + '</div>');
+          li.append('<div class="title"><strong>' + note.id + '</strong> - ' + note.title + '</div>');
           li.append('<div class="date">' + note.created_at + '</div>');
           if (prepend === true) {
               $('.notes ul').prepend(li);
@@ -31,36 +42,37 @@ $(function(){
 
       var renderHashtag = function(hashtag) {
           if( $('.hashtags button#hashtag' + hashtag.id).length > 0) return;
-          var button = $('<button id="hashtag' + hashtag.id + '">' + hashtag.title + '</button>');
+          var button = $('<button class="hashtag_link" id="hashtag' + hashtag.id + '">' + hashtag.title + '</button>');
           $('.hashtags_options').append(button);
       };
 
-      var loadRecent = function() {
+      var reloadHashtags = function() {
           hashtags({
                        'success': function(data, textSTatus, jqXhr) {
                            $.each(data, function(i, hashtag) { return renderHashtag(hashtag); });
                        } 
-                   });
+                   });          
+      };
+
+      var reloadNotes = function() {
+          var hashtag = hashtag_filter();
           notes({
-                      'success': function(data, textStatus, jqXhr) {
-                          $.each(data, function(i, note) { return renderNote(note); });
-                      }
+                    'data': (hashtag === null ? {} : {'filter' : hashtag}),
+                    'success': function(data, textStatus, jqXhr) {
+                        $('.notes ul').empty();
+                        $.each(data, function(i, note) { return renderNote(note); });
+                    }
                   });
           
       };
 
       var noteCreated = function(data, textStatus, jqXhr) {
-                                       renderNote(data, true);
-                                       $('#note_title').val('');
+          renderNote(data, true);
+          $('#note_title').val('');
+          reloadHashtags();
+      };
 
-                                       hashtags({
-                                                    'success': function(data, textSTatus, jqXhr) {
-                                                        $.each(data, function(i, hashtag) { return renderHashtag(hashtag); });
-                                                    } 
-                                                });
-                                   };
-
-      $('button.premade_link').bind('click', function() {
+      $('.premade_note_options').on('click', 'button.premade_link', function() {
                          notes({
                                    'type': 'post',
                                    'data': {'note[title]': $(this).text()},
@@ -68,7 +80,19 @@ $(function(){
                                });
                              });
 
-      $('form').bind('submit', function() {
+      
+      $('.hashtags_options').on('click', 'button.hashtag_link', function(e) {
+                                    if($(this).hasClass('btn-primary')) {
+                                        $(this).removeClass('btn-primary');
+                                    }
+                                    else {
+                                      $(this).parent().find('button.hashtag_link').removeClass('btn-primary');
+                                      $(this).toggleClass('btn-primary');
+                                    }
+                                    reloadNotes();
+                                  });
+
+      $('form.note-form').on('submit', function() {
                          notes({
                                    'type': 'post',
                                    'data': $('form').serializeArray(),
@@ -77,7 +101,8 @@ $(function(){
                          return false;
                      });
 
-      loadRecent();
+      reloadHashtags();
+      reloadNotes();
       $('#note_title').focus();
 
       

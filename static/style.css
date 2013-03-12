@@ -3,6 +3,12 @@
 
 .notes li {
     list-style: none;
+    margin: 0.25em 0;
+}
+
+.notes ul {
+  height: 400px;
+  overflow-y: auto;
 }
 
 .premade_note_options button,

@@ -52,7 +52,18 @@ def hashtags_index():
 # notes 
 @app.route('/notes')
 def notes_index():
-    notes = query_db('select * from notes order by created_at desc')
+    notes = []
+    if not request.args.has_key('filter'):
+        print "normal"
+        notes = query_db('select * from notes order by created_at desc')
+    else:
+        notes = query_db('select notes.* from notes ' + 
+                         'inner join hashtags_notes on notes.id = hashtags_notes.note_id ' + 
+                         'inner join hashtags on hashtags_notes.hashtag_id = hashtags.id ' + 
+                         'where hashtags.title = ? ' +
+                         'order by created_at desc',
+                         [request.args['filter']])
+
     return json.dumps(notes)
 
 # creating a note
