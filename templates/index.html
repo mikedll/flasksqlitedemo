@@ -1,19 +1,35 @@
 {% extends "layout.html" %}
 {% block body %}
-    <div class="newnote">
-      <form method="post" target="/" class="form-inline">
-          <input type="text" name="note[title]" id="note_title"/>
-          <input type="submit" value="Create" class="btn btn-primary"/>
-      </form>
-    </div>
-    <div class="notes">
-      <ul>
-        {% for note in notes %}
-          <li class="note{{note.id}}">
-            test
-            <div class="title">{{note['title']}}</div>
-            <div class="date">{{note['created_at']}}</div>
-          </li>
-        {% endfor %}
-    </div>
+      <div class="row-fluid">
+        <div class="span8">
+          <h1>Notes</h1>
+          <div class="newnote">
+            <form method="post" target="/" class="form-inline">
+              <input type="text" name="note[title]" id="note_title"/>
+              <input type="submit" value="Create" class="btn btn-primary"/>
+            </form>
+          </div>
+          <div class="notes">
+            <ul>
+            </ul>
+          </div>
+          </div>
+        <div class="span4">
+          <div class="premade_notes">
+            <h2>Premade notes</h2>
+            <div class="premade_note_options">
+              <button class="btn">Go to sleep</button>
+              <button class="btn">Wake up</button>
+              <button class="btn">Start/resume work</button>
+              <button class="btn">pause/stop work</button>
+            </div>
+          </div>
+
+          <div class="hashtags">
+            <h2>Hashtags</h2>
+            <div class="hashtags_options">
+            </div>
+          </div>
+        </div>
+      </div>
 {% endblock %}
