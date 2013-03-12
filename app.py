@@ -40,7 +40,8 @@ def teardown_request(exception):
 # index
 @app.route('/')
 def index():
-    return render_template('index.html')
+    premade = ['Go to sleep', 'Wake up', 'Start/resume work', 'pause/stop work']
+    return render_template('index.html', premade=premade)
 
 
 @app.route('/hashtags')

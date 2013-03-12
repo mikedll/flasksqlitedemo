@@ -29,7 +29,7 @@ $(function(){
           }
       };
 
-      var renderHashtag = function(hashtag, prepend) {
+      var renderHashtag = function(hashtag) {
           if( $('.hashtags button#hashtag' + hashtag.id).length > 0) return;
           var button = $('<button id="hashtag' + hashtag.id + '">' + hashtag.title + '</button>');
           $('.hashtags_options').append(button);
@@ -49,17 +49,32 @@ $(function(){
           
       };
 
+      var noteCreated = function(data, textStatus, jqXhr) {
+                                       renderNote(data, true);
+                                       $('#note_title').val('');
+
+                                       hashtags({
+                                                    'success': function(data, textSTatus, jqXhr) {
+                                                        $.each(data, function(i, hashtag) { return renderHashtag(hashtag); });
+                                                    } 
+                                                });
+                                   };
+
+      $('button.premade_link').bind('click', function() {
+                         notes({
+                                   'type': 'post',
+                                   'data': {'note[title]': $(this).text()},
+                                   'success': noteCreated
+                               });
+                             });
+
       $('form').bind('submit', function() {
                          notes({
-                                     'type': 'post',
-                                     'data': $('form').serializeArray(),
-                                     'success': function(data, textStatus, jqXhr) {
-                                         renderNote(data, true);
-                                         $('#note_title').val('');
-                                     }
-                                
-                            });
-                     return false;
+                                   'type': 'post',
+                                   'data': $('form').serializeArray(),
+                                   'success': noteCreated
+                               });
+                         return false;
                      });
 
       loadRecent();

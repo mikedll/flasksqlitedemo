@@ -18,10 +18,9 @@
           <div class="premade_notes">
             <h2>Premade notes</h2>
             <div class="premade_note_options">
-              <button class="btn">Go to sleep</button>
-              <button class="btn">Wake up</button>
-              <button class="btn">Start/resume work</button>
-              <button class="btn">pause/stop work</button>
+              {% for p in premade %}
+                <button class="btn premade_link">{{ p }}</button>
+              {% endfor %}
             </div>
           </div>
 

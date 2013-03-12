@@ -1,0 +1,12 @@
+.notes {
+}
+
+.notes li {
+    list-style: none;
+}
+
+.premade_note_options button,
+.hashtags_options button {
+  display: block;
+  margin: 1em 0;
+}
