@@ -46,7 +46,10 @@ def index():
 
 @app.route('/hashtags')
 def hashtags_index():
-    hashtags = query_db("select * from hashtags order by created_at desc")
+    hashtags = query_db('select hashtags.*, count(hashtags_notes.id) as notes_count from hashtags ' +
+                        'inner join hashtags_notes on hashtags.id = hashtags_notes.hashtag_id ' +
+                        'group by hashtags.id '
+                        'order by created_at desc ')
     return json.dumps(hashtags)
 
 # notes 

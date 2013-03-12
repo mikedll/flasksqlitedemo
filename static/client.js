@@ -17,7 +17,7 @@ $(function(){
       var hashtag_filter = function() {
           var btn = $('.hashtag_link.btn-primary');
           if( btn.length === 0 ) return null;
-          return btn.first().text();
+          return btn.first().data('filter');
       };
 
       var renderNote = function(note, prepend) {
@@ -41,8 +41,11 @@ $(function(){
       };
 
       var renderHashtag = function(hashtag) {
-          if( $('.hashtags button#hashtag' + hashtag.id).length > 0) return;
-          var button = $('<button class="hashtag_link" id="hashtag' + hashtag.id + '">' + hashtag.title + '</button>');
+          var pretty_title = hashtag.title + ' (' + hashtag.notes_count + ')';
+          if( $('.hashtags button#hashtag' + hashtag.id).length > 0) {
+              $('.hashtags button#hashtag' + hashtag.id).text(title);
+          }
+          var button = $('<button class="hashtag_link" data-filter="'+ hashtag.title + '" id="hashtag' + hashtag.id + '">' + pretty_title + '</button>');
           $('.hashtags_options').append(button);
       };
 
