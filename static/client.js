@@ -43,7 +43,8 @@ $(function(){
       var renderHashtag = function(hashtag) {
           var pretty_title = hashtag.title + ' (' + hashtag.notes_count + ')';
           if( $('.hashtags button#hashtag' + hashtag.id).length > 0) {
-              $('.hashtags button#hashtag' + hashtag.id).text(title);
+              $('.hashtags button#hashtag' + hashtag.id).text(pretty_title);
+              return;
           }
           var button = $('<button class="hashtag_link" data-filter="'+ hashtag.title + '" id="hashtag' + hashtag.id + '">' + pretty_title + '</button>');
           $('.hashtags_options').append(button);
@@ -90,7 +91,7 @@ $(function(){
                                     }
                                     else {
                                       $(this).parent().find('button.hashtag_link').removeClass('btn-primary');
-                                      $(this).toggleClass('btn-primary');
+                                      $(this).addClass('btn-primary');
                                     }
                                     reloadNotes();
                                   });
